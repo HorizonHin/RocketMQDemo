@@ -1,24 +1,26 @@
 package com.rocketmqdemo;
 
-import org.apache.rocketmq.jms.domain.JmsBaseConnectionFactory;
+import com.rocketmqdemo.Util.JMSUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.jms.*;
-import java.net.URI;
 import java.net.URISyntaxException;
 
+@Component
 public class JMSProducer {
 
-    public JMSProducer(){
-
+    public JMSProducer() {
     }
 
-    public void sendMessage(String topic, String message) throws JMSException, URISyntaxException {
-        ConnectionFactory connectionFactory = new JmsBaseConnectionFactory(new URI("tcp://localhost:9876"));
-        Connection connection = connectionFactory.createConnection();
-        connection.start();
+    @Autowired
+    JMSUtil jmsUtil;
+
+    public void sendMessage(String queueName, String message) throws JMSException, URISyntaxException {
+        Connection connection = jmsUtil.getConnection();
 
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        Destination queue = session.createQueue("queue/testQueue");
+        Destination queue = session.createQueue(queueName);
 //        Topic topic1 = session.createTopic(topic);
         TextMessage textMessage = session.createTextMessage(message);
 
@@ -26,6 +28,8 @@ public class JMSProducer {
         producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
         producer.send(textMessage);
 
-
+        producer.close();
+        session.close();
+        connection.close();
     }
 }
