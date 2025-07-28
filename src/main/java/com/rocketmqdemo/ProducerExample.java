@@ -1,5 +1,8 @@
 package com.rocketmqdemo;
 
+import org.apache.rocketmq.jms.domain.JmsBaseConnectionFactory;
+
+
 import org.apache.rocketmq.client.apis.ClientConfiguration;
 import org.apache.rocketmq.client.apis.ClientConfigurationBuilder;
 import org.apache.rocketmq.client.apis.ClientException;
@@ -14,6 +17,7 @@ public class ProducerExample {
     private static final Logger logger = LoggerFactory.getLogger(ProducerExample.class);
 
     public static void main(String[] args) throws ClientException {
+
         // 接入点地址，需要设置成Proxy的地址和端口列表，一般是xxx:8080;xxx:8081。
         String endpoint = "localhost:8081";
         // 消息发送的目标Topic名称，需要提前创建。

@@ -1,5 +1,7 @@
 package com.rocketmqdemo;
 
+
+
 import java.io.IOException;
 import java.util.Collections;
 import org.apache.rocketmq.client.apis.ClientConfiguration;
@@ -18,7 +20,7 @@ public class PushConsumerExample {
     private PushConsumerExample() {
     }
 
-    public static void main(String[] args) throws ClientException, IOException, InterruptedException {
+    public void Send(String msg) throws ClientException, IOException, InterruptedException {
         final ClientServiceProvider provider = ClientServiceProvider.loadService();
         // 接入点地址，需要设置成Proxy的地址和端口列表，一般是xxx:8081;xxx:8081。
         String endpoints = "localhost:8081";
@@ -32,6 +34,8 @@ public class PushConsumerExample {
         String consumerGroup = "YourConsumerGroup";
         // 指定需要订阅哪个目标Topic，Topic需要提前创建。
         String topic = "TestTopic";
+
+
         // 初始化PushConsumer，需要绑定消费者分组ConsumerGroup、通信参数以及订阅关系。
         PushConsumer pushConsumer = provider.newPushConsumerBuilder()
                 .setClientConfiguration(clientConfiguration)
