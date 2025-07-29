@@ -51,7 +51,7 @@ public class ClientTest extends  IntegrationTestBase {
         final CountDownLatch countDownLatch = new CountDownLatch(2);
         JmsTestListener listenerA = new JmsTestListener(10,countDownLatch);
         JmsTestListener listenerB = new JmsTestListener(10, countDownLatch);
-`
+
         try {
             //two consumers
             MessageConsumer messageConsumerA = session.createConsumer(destinationA);
