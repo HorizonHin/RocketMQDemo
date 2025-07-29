@@ -5,26 +5,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.jms.*;
-import java.net.URISyntaxException;
-
 @Component
-public class JMSProducer {
+public class RocketMQJMSProducer {
 
-    public JMSProducer() {
+    public RocketMQJMSProducer() {
     }
 
     @Autowired
     JMSUtil jmsUtil;
 
-    public void sendMessage(String queueName, String message) throws JMSException, URISyntaxException {
-        Connection connection = jmsUtil.getConnection();
-
+    public void sendMessage(String produceID, String consumerID, String topicName, String message) throws Exception {
+        Connection connection = jmsUtil.createRocketMQJMSConnection(produceID,consumerID);
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        Destination queue = session.createQueue(queueName);
-//        Topic topic1 = session.createTopic(topic);
-        TextMessage textMessage = session.createTextMessage(message);
 
-        MessageProducer producer = session.createProducer(queue);
+        Destination destination = session.createTopic(topicName);
+        TextMessage textMessage = session.createTextMessage(message);
+        MessageProducer producer = session.createProducer(destination);
         producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
         producer.send(textMessage);
 

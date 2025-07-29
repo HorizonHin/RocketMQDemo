@@ -5,21 +5,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.jms.*;
+import java.net.URI;
 import java.net.URISyntaxException;
 
 @Component
-public class JMSConsumer {
+public class RocketMQJMSConsumer {
 
     @Autowired
     private JMSUtil jmsUtil;
 
-    public void consume(String queueName) throws JMSException, URISyntaxException {
-        Connection connection = jmsUtil.getConnection();
-
+    public void consume(String producerID, String consumerID, String topicName) throws Exception {
+        Connection connection = jmsUtil.createRocketMQJMSConnection(producerID, consumerID);
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        Destination destination = session.createQueue(queueName);
+        Destination destination = session.createTopic(topicName);
         MessageConsumer consumer = session.createConsumer(destination);
-
         Message message = consumer.receive(10);
 
         if (message instanceof TextMessage) {

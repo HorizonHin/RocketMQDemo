@@ -4,16 +4,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class RocketMqDemoApplicationTests {
+import javax.jms.JMSException;
+import java.net.URISyntaxException;
+import java.util.concurrent.TimeUnit;
 
-    @Autowired
-    JMSConsumer consumer;
-    @Autowired
-    JMSProducer producer;
-    @Test
-    void contextLoads() {
+@SpringBootTest
+public class RocketMqDemoApplicationTests {
+
+
 
     }
 
-}
