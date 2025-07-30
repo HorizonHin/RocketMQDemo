@@ -1,12 +1,10 @@
-package com.rocketmqdemo;
+package com.rocketmqdemo.RocketMQJMS;
 
 import com.rocketmqdemo.Util.JMSUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.jms.*;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 @Component
 public class RocketMQJMSConsumer {

@@ -1,8 +1,12 @@
-package com.rocketmqdemo.Integration;
+package com.rocketmqdemo;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.Random;
 
+@Component
 public class IntegrationTestBase {
 
     protected static Random random = new Random();
@@ -15,7 +19,8 @@ public class IntegrationTestBase {
     protected static String producerId = "PID-jms-test";
     protected static String consumerId = "CID-jms-test";
     protected static String consumerId2 = "CID-jms-test-2";
-    protected static String nameServer = "172.29.224.22:9876";
+    @Value("${rocketmq.jms.nameServerAddr}")
+    protected String nameServer ;
     protected static String text = "English test";
 
 

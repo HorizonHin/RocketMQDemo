@@ -1,5 +1,7 @@
-package com.rocketmqdemo.Integration;
+package com.rocketmqdemo;
 
+import com.rocketmqdemo.RocketMQJMS.RocketMQJMSConsumer;
+import com.rocketmqdemo.RocketMQJMS.RocketMQJMSProducer;
 import com.rocketmqdemo.util.JmsTestListener;
 import org.apache.rocketmq.jms.domain.CommonConstant;
 import org.apache.rocketmq.jms.domain.JmsBaseConnectionFactory;
@@ -11,16 +13,28 @@ import java.util.concurrent.CountDownLatch;
 import  java.util.concurrent.TimeUnit;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import static com.rocketmqdemo.IntegrationTestBase.*;
 
-public class ClientTest extends  IntegrationTestBase {
+@SpringBootTest
+public class RocketMQJMSClientTest{
+
+    @Autowired
+    IntegrationTestBase testBase;
+
+    @Autowired
+    RocketMQJMSProducer producer;
+    @Autowired
+    RocketMQJMSConsumer consumer;
 
     private Connection createConnection(String producerGroup, String consumerGroup) throws JMSException, URISyntaxException {
         JmsBaseConnectionFactory connectionFactory = new JmsBaseConnectionFactory(new
                 URI(String.format("rocketmq://xxx?%s=%s&%s=%s&%s=%s&%s=%s&%s=%s&%s=%s",
                 CommonConstant.PRODUCERID, producerGroup,
                 CommonConstant.CONSUMERID, consumerGroup,
-                CommonConstant.NAMESERVER, nameServer,
+                CommonConstant.NAMESERVER, testBase.nameServer,
                 CommonConstant.CONSUME_THREAD_NUMS, consumeThreadNums,
                 CommonConstant.SEND_TIMEOUT_MILLIS, 10*1000,
                 CommonConstant.INSTANCE_NAME, "JMS_TEST")));
@@ -33,10 +47,18 @@ public class ClientTest extends  IntegrationTestBase {
                 URI(String.format("rocketmq://xxx?%s=%s&%s=%s&%s=%s&%s=%s",
 //                CommonConstant.PRODUCERID, producerGroup,
 //                CommonConstant.CONSUMERID, consumerGroup,
-                CommonConstant.NAMESERVER, nameServer,
+                CommonConstant.NAMESERVER, testBase.nameServer,
                 CommonConstant.CONSUME_THREAD_NUMS, consumeThreadNums,
                 CommonConstant.SEND_TIMEOUT_MILLIS, 10*1000,
                 CommonConstant.INSTANCE_NAME, "JMS_TEST")));
+    }
+
+
+    @Test
+    public void testSendMessage() throws Exception {
+        String message = "Hello RocketMQ";
+        producer.sendMessage(producerId, consumerId,topic2, message);
+        consumer.consume(producerId,consumerId,topic2);
     }
 
 

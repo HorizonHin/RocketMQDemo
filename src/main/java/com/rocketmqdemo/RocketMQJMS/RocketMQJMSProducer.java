@@ -1,4 +1,4 @@
-package com.rocketmqdemo;
+package com.rocketmqdemo.RocketMQJMS;
 
 import com.rocketmqdemo.Util.JMSUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +8,6 @@ import javax.jms.*;
 @Component
 public class RocketMQJMSProducer {
 
-    public RocketMQJMSProducer() {
-    }
 
     @Autowired
     JMSUtil jmsUtil;

@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: RocketMQDemo
+
+wslAddr: 172.29.224.22
+activemq:
+    broker-url: tcp://${wslAddr}:61616
+    user: admin   # 可选
+    password: admin  # 可选
+    packages:
+      trust-all: true
+rocketmq:
+  jms:
+    nameServerAddr: ${wslAddr}:9876

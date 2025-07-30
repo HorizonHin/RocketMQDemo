@@ -40,10 +40,10 @@ public class JMSUtil {
         return  connectionFactory.createConnection();
     }
 
-    public Connection createActiveMQConnection() throws JMSException {
-        ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://localhost:61616");
-        Connection connection = factory.createConnection();
-        return connection;
-    }
+//    public Connection createActiveMQConnection() throws JMSException {
+//        ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://localhost:61616");
+//        Connection connection = factory.createConnection();
+//        return connection;
+//    }
 
 }
