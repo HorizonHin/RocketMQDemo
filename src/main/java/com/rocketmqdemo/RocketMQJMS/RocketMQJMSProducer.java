@@ -4,6 +4,7 @@ import com.rocketmqdemo.Util.JMSUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+
 import javax.jms.*;
 @Component
 public class RocketMQJMSProducer {
@@ -19,7 +20,6 @@ public class RocketMQJMSProducer {
         Destination destination = session.createTopic(topicName);
         TextMessage textMessage = session.createTextMessage(message);
         MessageProducer producer = session.createProducer(destination);
-        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
         producer.send(textMessage);
 
         producer.close();

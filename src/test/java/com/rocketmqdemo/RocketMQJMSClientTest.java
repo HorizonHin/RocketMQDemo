@@ -11,18 +11,20 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.CountDownLatch;
 import  java.util.concurrent.TimeUnit;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static com.rocketmqdemo.IntegrationTestBase.*;
+import static com.rocketmqdemo.TestBase.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class RocketMQJMSClientTest{
-
-    @Autowired
-    IntegrationTestBase testBase;
+    @Value("${rocketmq.jms.nameServerAddr}")
+    protected  String nameServer ;
+    //"172.29.224.22:9876"
 
     @Autowired
     RocketMQJMSProducer producer;
@@ -34,31 +36,40 @@ public class RocketMQJMSClientTest{
                 URI(String.format("rocketmq://xxx?%s=%s&%s=%s&%s=%s&%s=%s&%s=%s&%s=%s",
                 CommonConstant.PRODUCERID, producerGroup,
                 CommonConstant.CONSUMERID, consumerGroup,
-                CommonConstant.NAMESERVER, testBase.nameServer,
+                CommonConstant.NAMESERVER, nameServer,
                 CommonConstant.CONSUME_THREAD_NUMS, consumeThreadNums,
                 CommonConstant.SEND_TIMEOUT_MILLIS, 10*1000,
                 CommonConstant.INSTANCE_NAME, "JMS_TEST")));
         return  connectionFactory.createConnection();
     }
 
-    @Test   //测试必须在URI中设置ProducerID和ConsumerID
-    public void createConnectionWithoutCPID() throws Exception {
-        JmsBaseConnectionFactory connectionFactory = new JmsBaseConnectionFactory(new
-                URI(String.format("rocketmq://xxx?%s=%s&%s=%s&%s=%s&%s=%s",
-//                CommonConstant.PRODUCERID, producerGroup,
-//                CommonConstant.CONSUMERID, consumerGroup,
-                CommonConstant.NAMESERVER, testBase.nameServer,
-                CommonConstant.CONSUME_THREAD_NUMS, consumeThreadNums,
-                CommonConstant.SEND_TIMEOUT_MILLIS, 10*1000,
-                CommonConstant.INSTANCE_NAME, "JMS_TEST")));
+
+    @Test
+    public void createConnectionWithoutCPID_shouldThrowException() {
+        assertThrows(Exception.class, () -> {
+            URI uri = new URI(String.format("rocketmq://xxx?%s=%s&%s=%s&%s=%s&%s=%s",
+                    CommonConstant.NAMESERVER, nameServer,
+                    CommonConstant.CONSUME_THREAD_NUMS, consumeThreadNums,
+                    CommonConstant.SEND_TIMEOUT_MILLIS, 10 * 1000,
+                    CommonConstant.INSTANCE_NAME, "JMS_TEST"));
+            new JmsBaseConnectionFactory(uri);
+        });
     }
+
 
 
     @Test
     public void testSendMessage() throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+        consumer.setLatch(latch);
+
         String message = "Hello RocketMQ";
-        producer.sendMessage(producerId, consumerId,topic2, message);
         consumer.consume(producerId,consumerId,topic2);
+        producer.sendMessage(producerId, consumerId,topic2, message);
+         boolean received = latch.await(5,TimeUnit.SECONDS);
+
+         consumer.close();
+         Assertions.assertTrue(received,"dont ceceived");
     }
 
 
@@ -86,22 +97,22 @@ public class RocketMQJMSClientTest{
 
             for (int i = 0; i < 10; i++) {
                 TextMessage message = session.createTextMessage(text + i);
-                Assert.assertNull(message.getJMSMessageID());
+                Assertions.assertNull(message.getJMSMessageID());
                 messageProducer.send(message);
-                Assert.assertNotNull(message.getJMSMessageID());
+                Assertions.assertNotNull(message.getJMSMessageID());
             }
             for (int i = 0; i < 10; i++) {
                 TextMessage message = session.createTextMessage(text + i);
-                Assert.assertNull(message.getJMSMessageID());
+                Assertions.assertNull(message.getJMSMessageID());
                 messageProducer.send(destinationB, message);
-                Assert.assertNotNull(message.getJMSMessageID());
+                Assertions.assertNotNull(message.getJMSMessageID());
             }
 
             if (countDownLatch.await(10, TimeUnit.SECONDS)) {
                 Thread.sleep(2000);
             }
-            Assert.assertEquals(10, listenerA.getConsumedNum());
-            Assert.assertEquals(10, listenerB.getConsumedNum());
+            Assertions.assertEquals(10, listenerA.getConsumedNum());
+            Assertions.assertEquals(10, listenerB.getConsumedNum());
         }
         finally {
             //Close the connection

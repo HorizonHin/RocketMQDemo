@@ -3,7 +3,6 @@ package com.rocketmqdemo.ActiveMQ;
 import jakarta.jms.*;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CountDownLatch;

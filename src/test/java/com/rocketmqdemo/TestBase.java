@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.Random;
 
 @Component
-public class IntegrationTestBase {
+public class TestBase {
 
     protected static Random random = new Random();
     protected static final String SEP = File.separator;

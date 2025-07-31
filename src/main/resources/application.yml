@@ -1,6 +1,8 @@
 spring:
   application:
     name: RocketMQDemo
+server:
+  port: 9000
 
 wslAddr: 172.29.224.22
 activemq:

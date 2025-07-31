@@ -1,6 +1,5 @@
 package com.rocketmqdemo.Util;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.rocketmq.jms.domain.CommonConstant;
 import org.apache.rocketmq.jms.domain.JmsBaseConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
-import javax.jms.JMSException;
 import java.net.URI;
 
 @Component
