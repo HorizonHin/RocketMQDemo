@@ -43,8 +43,6 @@ public class RocketMQJMSConsumer {
             }
         });
         connection.start(); // 别忘了启动连接
-
-
     }
 
     public void setLatch(CountDownLatch latch) {

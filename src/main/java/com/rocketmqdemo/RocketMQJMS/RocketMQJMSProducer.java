@@ -1,6 +1,7 @@
 package com.rocketmqdemo.RocketMQJMS;
 
 import com.rocketmqdemo.Util.JMSUtil;
+import org.apache.rocketmq.jms.domain.message.JmsTextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,7 @@ public class RocketMQJMSProducer {
         TextMessage textMessage = session.createTextMessage(message);
         MessageProducer producer = session.createProducer(destination);
         producer.send(textMessage);
+
 
         producer.close();
         session.close();
