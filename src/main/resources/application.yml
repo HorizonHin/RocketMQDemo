@@ -1,10 +1,21 @@
+wslAddr: 172.27.149.53
 spring:
   application:
     name: RocketMQDemo
+  kafka:
+    bootstrap-servers: ${wslAddr}:9092
+    consumer:
+      group-id: my-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
 server:
   port: 9000
 
-wslAddr: 172.29.224.22
 activemq:
     broker-url: tcp://${wslAddr}:61616
     user: admin   # 可选

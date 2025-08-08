@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class RocketMQJMSClientTest{
     @Value("${rocketmq.jms.nameServerAddr}")
     protected  String nameServer ;
-    //"172.29.224.22:9876"
 
     @Autowired
     RocketMQJMSProducer producer;

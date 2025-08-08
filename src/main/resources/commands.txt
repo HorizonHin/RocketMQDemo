@@ -1,0 +1,19 @@
+bin目录下，activemq启动
+./activemq console
+activemq 守护程序
+./activemq start
+
+sudo rabbitmq-server
+
+启动rocketMQ  nameserver
+nohup sh bin/mqnamesrv &
+启动broker
+nohup sh bin/mqbroker -n localhost:9876 &
+
+
+
+./bin/zookeeper-server-start.sh ../config/zookeeper.properties  &
+./bin/kafka-server-start.sh ../config/server.properties &
+
+ip a
+sudo lsof -i :5672
